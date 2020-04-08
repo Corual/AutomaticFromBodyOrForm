@@ -55,23 +55,25 @@ namespace FromBodyOrForm
                 throw new ArgumentNullException(nameof(bindingContext));
             }
 
-            //避免与原系统的FromBody、FromForm特性冲突,不是自定义的绑定源都直接返回
-            if (bindingContext.BindingSource != BindingSource.Custom)
-            {
-                return;
-            }
+            #region 该代码已移动到FromBodyOrFormProvider.cs
+            ////避免与原系统的FromBody、FromForm特性冲突,不是自定义的绑定源都直接返回
+            //if (bindingContext.BindingSource != BindingSource.Custom)
+            //{
+            //    return;
+            //}
 
-            //没有打上AutoFromBodyOrForm标记的，都不处理，避免系统注册了多种自定义的绑定源
-            bool hasAutoFrom = ((DefaultModelMetadata)bindingContext.ModelMetadata)
-                .Attributes
-                .ParameterAttributes.Any(attr => typeof(AutoFromBodyOrFormAttribute)
-                .IsAssignableFrom(attr.GetType())) || null != bindingContext.ModelType.GetCustomAttribute<AutoFromBodyOrFormAttribute>(true);
+            ////没有打上AutoFromBodyOrForm标记的，都不处理，避免系统注册了多种自定义的绑定源
+            //bool hasAutoFrom = ((DefaultModelMetadata)bindingContext.ModelMetadata)
+            //    .Attributes
+            //    .ParameterAttributes.Any(attr => typeof(AutoFromBodyOrFormAttribute)
+            //    .IsAssignableFrom(attr.GetType())) || null != bindingContext.ModelType.GetCustomAttribute<AutoFromBodyOrFormAttribute>(true);
 
-            if (!hasAutoFrom)
-            {
-                return;
-            }
+            //if (!hasAutoFrom)
+            //{
+            //    return;
+            //}
 
+            #endregion
 
             //获取请求类容的Type
             string contentType = bindingContext.HttpContext.Request.ContentType;
