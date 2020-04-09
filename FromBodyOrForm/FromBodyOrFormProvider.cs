@@ -34,10 +34,11 @@ namespace FromBodyOrForm
             }
 
             //没有打上AutoFromBodyOrForm标记的，都不处理，避免系统注册了多种自定义的绑定源
-            bool hasAutoFrom = ((DefaultModelMetadata)context.Metadata)
-                .Attributes
+            var metadata = ((DefaultModelMetadata)context.Metadata);
+            bool hasAutoFrom = (null != metadata.Attributes &&
+                metadata.Attributes
                 .ParameterAttributes.Any(attr => typeof(AutoFromBodyOrFormAttribute)
-                .IsAssignableFrom(attr.GetType())) || null != context.Metadata.ModelType.GetCustomAttribute<AutoFromBodyOrFormAttribute>(true);
+                .IsAssignableFrom(attr.GetType()))) || (null != context.Metadata.ModelType.GetCustomAttribute<AutoFromBodyOrFormAttribute>(true));
 
             if (!hasAutoFrom)
             {
